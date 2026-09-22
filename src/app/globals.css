@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  --color-void: #00000f;
+  --color-panel: #050712;
+  --color-steel: #b9c2d0;
+  --color-neon-yellow: #fcee0a;
+  --color-neon-cyan: #00f0ff;
+  --color-neon-red: #f75049;
+
+  --animate-die-roll: die-roll 0.14s linear infinite;
+  --animate-die-pop: die-pop 0.45s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+  --animate-ready: ready 1.2s ease-in-out infinite;
+  --animate-flicker: flicker 3s linear infinite;
+
+  @keyframes die-roll {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(14deg) scale(1.08) translateY(-2px); }
+    50% { transform: rotate(-10deg) scale(0.95); }
+    75% { transform: rotate(8deg) scale(1.05) translateY(2px); }
+    100% { transform: rotate(0deg) scale(1); }
+  }
+  @keyframes die-pop {
+    0% { transform: scale(1.6); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes ready {
+    0%, 100% { opacity: 1; transform: translateY(0); }
+    50% { opacity: 0.55; transform: translateY(-2px); }
+  }
+  @keyframes flicker {
+    0%, 92%, 96%, 100% { opacity: 1; }
+    94% { opacity: 0.6; }
+  }
+}
+
+@theme inline {
+  --font-sans: var(--font-saira), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-orbitron), var(--font-saira), ui-sans-serif, sans-serif;
+}
+
+/* Neon glow that follows the element's current text color. */
+@utility glow {
+  filter: drop-shadow(0 0 3px currentColor)
+    drop-shadow(0 0 10px color-mix(in srgb, currentColor 45%, transparent));
+}
+@utility glow-text {
+  text-shadow: 0 0 6px color-mix(in srgb, currentColor 70%, transparent),
+    0 0 18px color-mix(in srgb, currentColor 35%, transparent);
+}
+@utility glow-box {
+  box-shadow: 0 0 10px color-mix(in srgb, currentColor 45%, transparent),
+    inset 0 0 12px color-mix(in srgb, currentColor 18%, transparent);
+}
+
+html,
+body {
+  background: var(--color-void);
+  color: #fff;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Faint CRT scanlines over everything. */
+body::after {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 2px,
+    rgb(255 255 255 / 0.018) 2px 3px
+  );
+}
+
+button {
+  cursor: pointer;
+  touch-action: manipulation;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
