@@ -59,7 +59,7 @@ export default function Game() {
   const [rolling, setRolling] = useState<Rolling | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [confirmReset, setConfirmReset] = useState(false);
+  const [menuView, setMenuView] = useState<"main" | "restart" | "concede">("main");
   const rollTimer = useRef<number | null>(null);
 
   const s = store.present;
@@ -205,7 +205,10 @@ export default function Game() {
           )}
         </div>
 
-        <NeonButton size="sm" color="#fcee0a" aria-label="Menu" onClick={() => setMenuOpen(true)}>
+        <NeonButton size="sm" color="#fcee0a" aria-label="Menu" onClick={() => {
+            setMenuView("main");
+            setMenuOpen(true);
+          }}>
           <MenuIcon /> <span className="hidden sm:inline">Menu</span>
         </NeonButton>
       </div>
@@ -226,11 +229,11 @@ export default function Game() {
       {menuOpen && (
         <Modal label="Menu" color="#fcee0a" onClose={() => setMenuOpen(false)}>
           <h2 className="glow-text font-display text-xl font-bold tracking-[0.2em] uppercase">Menu</h2>
-          {confirmReset ? (
+          {menuView === "restart" ? (
             <div className="mt-5 space-y-3">
               <p className="text-sm text-white">Restart with the same players? Every die goes back to the fixer area.</p>
               <div className="grid grid-cols-2 gap-2">
-                <NeonButton color="#b9c2d0" onClick={() => setConfirmReset(false)}>
+                <NeonButton color="#b9c2d0" onClick={() => setMenuView("main")}>
                   Cancel
                 </NeonButton>
                 <NeonButton
@@ -239,7 +242,6 @@ export default function Game() {
                   onClick={() => {
                     clearUi();
                     dispatch({ type: "restart" });
-                    setConfirmReset(false);
                     setMenuOpen(false);
                   }}
                 >
@@ -247,9 +249,31 @@ export default function Game() {
                 </NeonButton>
               </div>
             </div>
+          ) : menuView === "concede" ? (
+            <div className="mt-5 space-y-3">
+              <p className="text-sm text-white">Who is conceding? Their rival wins the game.</p>
+              <div className="grid gap-2">
+                {([0, 1] as PlayerId[]).map((id) => (
+                  <NeonButton
+                    key={id}
+                    color={s.players[id].color}
+                    onClick={() => {
+                      clearUi();
+                      dispatch({ type: "concede", player: id });
+                      setMenuOpen(false);
+                    }}
+                  >
+                    <span className="truncate">{s.players[id].name} concedes</span>
+                  </NeonButton>
+                ))}
+                <NeonButton color="#b9c2d0" onClick={() => setMenuView("main")}>
+                  Cancel
+                </NeonButton>
+              </div>
+            </div>
           ) : (
             <div className="mt-5 grid gap-2">
-              <NeonButton onClick={() => setConfirmReset(true)}>Restart game</NeonButton>
+              <NeonButton onClick={() => setMenuView("restart")}>Restart game</NeonButton>
               <NeonButton
                 onClick={() => {
                   clearUi();
@@ -259,6 +283,11 @@ export default function Game() {
               >
                 New game setup
               </NeonButton>
+              {s.status === "playing" && (
+                <NeonButton color={MIN_COLOR} onClick={() => setMenuView("concede")}>
+                  Concede
+                </NeonButton>
+              )}
               <NeonButton color="#00f0ff" onClick={() => setPrefs((p) => ({ ...p, flipTop: !p.flipTop }))}>
                 Flip Player 2: {flipTop ? "On" : "Off"}
               </NeonButton>

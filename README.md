@@ -10,6 +10,7 @@ A mobile-first web app for tracking Gig dice in the [Cyberpunk Trading Card Game
 - **Adjust values.** Tap any rolled Gig to set its value with −/+, a number grid, or a reroll.
 - **Steal and swap.** Steal lets you pick any number of rival Gigs. Swap trades one friendly Gig for one rival Gig. Values are kept in both cases.
 - **Win detection.** A player who starts their turn with 7 Gigs wins. Overtime begins after two consecutive turns in which both fixer areas were empty. In overtime, reaching 7 Gigs wins instantly.
+- **Concede.** Either player can concede from the menu; their rival wins.
 - **Undo.** Every game action can be undone, including ending a turn or a win.
 - **Stats.** Each side shows its Gig count, Street Cred (the sum of its values) and pairs.
 - **Screen stays awake.** During a game the app uses the Screen Wake Lock API so the phone doesn't dim or lock. It can be turned off in the menu.
@@ -73,6 +74,7 @@ The engine in `src/lib/game.ts` follows the [Comprehensive Rules](https://cyberp
 | CR 6.4.4–6.4.5 | A Gig can't be set to a value not on its faces, or to its current value |
 | CR 6.5.1 | Each Gig counts towards only one value-pair |
 | CR 6.6 / 6.7 | Swaps and steals keep dice values unchanged |
+| CR 1.16.1 | A player may concede at any time; their rival wins |
 
 ## Disclaimer
 

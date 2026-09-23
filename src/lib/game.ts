@@ -149,6 +149,7 @@ export type Action =
   | { type: "steal"; thief: PlayerId; dieIds: string[] }
   | { type: "swap"; a: string; b: string }
   | { type: "endTurn" }
+  | { type: "concede"; player: PlayerId }
   | { type: "updatePlayer"; id: PlayerId; patch: Partial<Player> };
 
 const label = (d: Die) => `D${d.sides}`;
@@ -280,6 +281,11 @@ export function gameReducer(s: GameState, a: Action): GameState {
         lastEvent: `Swapped ${s.players[da.controller].name}'s ${label(da)} ↔ ${s.players[db.controller].name}'s ${label(db)}`,
       });
     }
+
+    case "concede":
+      // A player may concede at any point; their rival wins (CR 1.16.1).
+      if (s.status !== "playing") return s;
+      return win(s, rival(a.player), `${s.players[a.player].name} conceded`);
 
     case "endTurn": {
       if (!canEndTurn(s)) return s;
