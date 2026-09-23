@@ -213,7 +213,7 @@ export default function Game() {
       )}
 
       {menuOpen && (
-        <Modal label="Menu" color="#fcee0a" flipped={flipDialogs} onClose={() => setMenuOpen(false)}>
+        <Modal label="Menu" color="#fcee0a" onClose={() => setMenuOpen(false)}>
           <h2 className="glow-text font-display text-xl font-bold tracking-[0.2em] uppercase">Menu</h2>
           {confirmReset ? (
             <div className="mt-5 space-y-3">
