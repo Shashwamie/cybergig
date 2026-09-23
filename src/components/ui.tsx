@@ -99,8 +99,8 @@ interface DieButtonProps {
   onNudge?: (value: number) => void;
 }
 
-const NUDGE_START_PX = 16;
-const NUDGE_STEP_PX = 24;
+const NUDGE_START_PX = 32;
+const NUDGE_STEP_PX = 48;
 
 /**
  * Vertical swipe on a rolled Gig: up increases, down decreases, one step per NUDGE_STEP_PX.
