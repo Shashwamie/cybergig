@@ -40,6 +40,7 @@ interface PlayerPanelProps {
   onConfirmMode: () => void;
   onCancelMode: () => void;
   onColor: (hex: string) => void;
+  onSetValue: (die: Die, value: number) => void;
 }
 
 export function PlayerPanel({
@@ -54,6 +55,7 @@ export function PlayerPanel({
   onConfirmMode,
   onCancelMode,
   onColor,
+  onSetValue,
 }: PlayerPanelProps) {
   const [pickingColor, setPickingColor] = useState(false);
   const player = state.players[id];
@@ -171,6 +173,7 @@ export function PlayerPanel({
               pop={state.lastRolledId === d.id}
               disabled={gigsLocked}
               onClick={() => onDieTap(d)}
+              onNudge={mode || rolling ? undefined : (value) => onSetValue(d, value)}
             />
           ))
         )}

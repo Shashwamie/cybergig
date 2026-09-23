@@ -1,6 +1,14 @@
 "use client";
 
-import { useEffect, type ButtonHTMLAttributes, type CSSProperties, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ButtonHTMLAttributes,
+  type CSSProperties,
+  type PointerEvent,
+  type ReactNode,
+} from "react";
 import { DieIcon } from "@/components/DieIcon";
 import { MAX_COLOR, MIN_COLOR, type Die } from "@/lib/game";
 
@@ -87,6 +95,77 @@ interface DieButtonProps {
   pop?: boolean;
   disabled?: boolean;
   onClick?: () => void;
+  /** Enables swipe up/down to nudge the value; called once with the new value on release. */
+  onNudge?: (value: number) => void;
+}
+
+const NUDGE_START_PX = 16;
+const NUDGE_STEP_PX = 24;
+
+/**
+ * Vertical swipe on a rolled Gig: up increases, down decreases, one step per NUDGE_STEP_PX.
+ * The value previews while dragging and commits once on release (one undo step per swipe).
+ * "Up" is relative to the player: on Player 2's flipped panel, screen directions are reversed.
+ */
+function useNudgeDrag(die: Die, onNudge?: (value: number) => void) {
+  const [steps, setSteps] = useState(0);
+  const drag = useRef<{ pointerId: number; startY: number; invert: boolean; moved: boolean } | null>(null);
+  const swallowClick = useRef(false);
+  const enabled = !!onNudge && die.value != null;
+
+  const clampSteps = (n: number) => Math.max(1 - die.value!, Math.min(die.sides - die.value!, n));
+
+  const handlers = enabled
+    ? {
+        onPointerDown(e: PointerEvent<HTMLButtonElement>) {
+          const section = e.currentTarget.closest("section");
+          const invert = !!section && getComputedStyle(section).rotate === "180deg";
+          drag.current = { pointerId: e.pointerId, startY: e.clientY, invert, moved: false };
+          swallowClick.current = false;
+          e.currentTarget.setPointerCapture(e.pointerId);
+        },
+        onPointerMove(e: PointerEvent<HTMLButtonElement>) {
+          const d = drag.current;
+          if (!d || e.pointerId !== d.pointerId) return;
+          const up = (d.startY - e.clientY) * (d.invert ? -1 : 1);
+          if (!d.moved && Math.abs(up) < NUDGE_START_PX) return;
+          d.moved = true;
+          const raw = Math.sign(up) * Math.floor((Math.abs(up) - NUDGE_START_PX) / NUDGE_STEP_PX + 1);
+          const next = clampSteps(raw);
+          setSteps((prev) => {
+            if (prev !== next) {
+              try {
+                navigator.vibrate?.(8);
+              } catch {}
+            }
+            return next;
+          });
+        },
+        onPointerUp(e: PointerEvent<HTMLButtonElement>) {
+          const d = drag.current;
+          if (!d || e.pointerId !== d.pointerId) return;
+          drag.current = null;
+          if (d.moved) {
+            swallowClick.current = true;
+            if (steps !== 0) onNudge!(die.value! + steps);
+          }
+          setSteps(0);
+        },
+        onPointerCancel() {
+          drag.current = null;
+          setSteps(0);
+        },
+      }
+    : {};
+
+  /** True if the click that follows a swipe should be ignored. */
+  const consumeSwipeClick = () => {
+    const swallow = swallowClick.current;
+    swallowClick.current = false;
+    return swallow;
+  };
+
+  return { steps, handlers, enabled, consumeSwipeClick };
 }
 
 export function DieButton({
@@ -102,8 +181,10 @@ export function DieButton({
   pop,
   disabled,
   onClick,
+  onNudge,
 }: DieButtonProps) {
-  const value = face !== undefined ? face : die.value;
+  const nudge = useNudgeDrag(die, disabled ? undefined : onNudge);
+  const value = face !== undefined ? face : die.value != null ? die.value + nudge.steps : null;
   const inGig = variant === "gig" && value != null;
   const max = inGig && value === die.sides;
   const min = inGig && value === 1;
@@ -115,7 +196,10 @@ export function DieButton({
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={() => {
+        if (!nudge.consumeSwipeClick()) onClick?.();
+      }}
+      {...nudge.handlers}
       disabled={disabled}
       aria-label={`D${die.sides}${value != null ? `, value ${value}` : ", not rolled"}${tags ? `, ${tags.toLowerCase().replaceAll("·", ", ")}` : ""}`}
       aria-pressed={selected || undefined}
@@ -124,6 +208,9 @@ export function DieButton({
         "group relative flex flex-col items-center transition duration-200 disabled:cursor-default",
         dimmed && "opacity-25",
         selected && "-translate-y-1",
+        // Claim vertical drags for nudging instead of scrolling the page.
+        nudge.enabled && "touch-none select-none",
+        nudge.steps !== 0 && "scale-110",
       )}
     >
       <span
@@ -158,6 +245,14 @@ export function DieButton({
       )}
       {selected && (
         <span className="absolute -inset-1.5 border border-dashed border-white/90" aria-hidden />
+      )}
+      {nudge.steps !== 0 && (
+        <span
+          aria-hidden
+          className="glow-text absolute -top-3 -right-2 font-display text-xs font-bold text-white lg:text-sm"
+        >
+          {nudge.steps > 0 ? `+${nudge.steps}` : nudge.steps}
+        </span>
       )}
     </button>
   );

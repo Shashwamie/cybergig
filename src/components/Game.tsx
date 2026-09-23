@@ -154,6 +154,7 @@ export default function Game() {
       onConfirmMode={confirmMode}
       onCancelMode={() => setMode(null)}
       onColor={(color) => dispatch({ type: "updatePlayer", id, patch: { color } })}
+      onSetValue={(die, value) => dispatch({ type: "set", dieId: die.id, value })}
     />
   );
 
@@ -300,7 +301,7 @@ export default function Game() {
                 Close
               </NeonButton>
               <p className="mt-2 text-[11px] leading-relaxed text-steel/60">
-                Tap a player&apos;s name to change their dice color. Tap any rolled Gig to change its value.
+                Tap a player&apos;s name to change their dice color. Tap any rolled Gig to change its value, or swipe it up or down to nudge it by 1.
                 Undo reverses any mistake, including ending a turn.
               </p>
               <p className="mt-1 border-t border-current/20 pt-3 text-[10px] leading-relaxed text-steel/50">
