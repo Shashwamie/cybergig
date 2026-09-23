@@ -107,7 +107,8 @@ export function DieButton({
   const inGig = variant === "gig" && value != null;
   const max = inGig && value === die.sides;
   const min = inGig && value === 1;
-  const tone = max ? MAX_COLOR : min ? MIN_COLOR : color;
+  // Min/max only recolor the number and label; the outline keeps the owner's color.
+  const tone = max ? MAX_COLOR : min ? MIN_COLOR : undefined;
   const tags = [max && "MAX", min && "MIN", paired && "PAIR"].filter(Boolean).join(" · ");
   const fixer = variant === "fixer" && !rolling;
 
@@ -118,7 +119,7 @@ export function DieButton({
       disabled={disabled}
       aria-label={`D${die.sides}${value != null ? `, value ${value}` : ", not rolled"}${tags ? `, ${tags.toLowerCase()}` : ""}`}
       aria-pressed={selected || undefined}
-      style={{ color: tone }}
+      style={{ color }}
       className={cx(
         "group relative flex flex-col items-center transition duration-200 disabled:cursor-default",
         dimmed && "opacity-25",
@@ -141,12 +142,16 @@ export function DieButton({
           value={value}
           dashed={fixer}
           doubled={paired}
-          fillOpacity={max || min ? 0.16 : fixer ? 0 : 0.06}
+          fillOpacity={fixer ? 0 : 0.06}
+          textColor={tone}
           className={cx("size-full", !fixer || ready ? "glow" : "opacity-60")}
         />
       </span>
       {variant === "gig" && (
-        <span className="mt-0.5 font-display text-[9px] tracking-[0.15em] whitespace-nowrap opacity-80">
+        <span
+          style={{ color: tone }}
+          className="mt-0.5 font-display text-[9px] tracking-[0.15em] whitespace-nowrap opacity-80"
+        >
           D{die.sides}
           {tags && ` · ${tags}`}
         </span>

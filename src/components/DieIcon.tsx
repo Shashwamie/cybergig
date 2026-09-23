@@ -25,10 +25,12 @@ interface DieIconProps {
   dashed?: boolean;
   doubled?: boolean;
   fillOpacity?: number;
+  /** Color for the number; defaults to the outline's currentColor. */
+  textColor?: string;
   className?: string;
 }
 
-export function DieIcon({ sides, value, dashed, doubled, fillOpacity = 0.06, className }: DieIconProps) {
+export function DieIcon({ sides, value, dashed, doubled, fillOpacity = 0.06, textColor, className }: DieIconProps) {
   const s = SHAPES[sides];
   const text = value == null ? `D${sides}` : String(value);
   const font = value == null ? s.font * 0.62 : text.length > 1 ? s.font * 0.9 : s.font;
@@ -59,7 +61,7 @@ export function DieIcon({ sides, value, dashed, doubled, fillOpacity = 0.06, cla
         y={s.cy}
         textAnchor="middle"
         dominantBaseline="central"
-        fill="currentColor"
+        fill={textColor ?? "currentColor"}
         fontSize={font}
         fontWeight={value == null ? 500 : 700}
         style={{ fontFamily: "var(--font-orbitron)" }}

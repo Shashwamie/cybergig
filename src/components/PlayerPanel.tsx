@@ -153,7 +153,8 @@ export function PlayerPanel({
             <DieButton
               key={d.id}
               die={d}
-              color={player.color}
+              // Dice keep their owner's color even after being stolen or swapped.
+              color={state.players[d.owner].color}
               variant="gig"
               paired={paired.has(d.id)}
               selected={isSelected(d)}

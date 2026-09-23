@@ -204,7 +204,7 @@ export default function Game() {
       {editing && (
         <DieEditor
           die={editing}
-          color={s.players[editing.controller].color}
+          color={s.players[editing.owner].color}
           owner={s.players[editing.controller].name}
           flipped={flipDialogs}
           onSet={(value) => dispatch({ type: "set", dieId: editing.id, value })}
@@ -317,8 +317,8 @@ function DieEditor({ die, color, owner, flipped, onSet, onClose }: DieEditorProp
         <NeonButton size="lg" aria-label="Decrease" disabled={value <= 1} onClick={() => onSet(value - 1)}>
           <span className="text-2xl leading-none">−</span>
         </NeonButton>
-        <span style={{ color: tone }} className="block size-24">
-          <DieIcon sides={die.sides} value={value} className="glow size-full" fillOpacity={0.1} />
+        <span className="block size-24">
+          <DieIcon sides={die.sides} value={value} textColor={tone} className="glow size-full" fillOpacity={0.1} />
         </span>
         <NeonButton size="lg" aria-label="Increase" disabled={value >= die.sides} onClick={() => onSet(value + 1)}>
           <span className="text-2xl leading-none">+</span>

@@ -6,14 +6,14 @@ A mobile-first web app for tracking Gig dice in the [Cyberpunk Trading Card Game
 
 - **Shared-device play.** On a phone held upright, the top player's half is flipped 180° so players sitting across from each other can each read their own side. On desktop or a phone turned sideways, the halves sit side by side. The flip can be turned off in the menu.
 - **Roll-in enforcement.** Each player starts with a D4, D6, D8, D10, D12 and D20 in their fixer area. The active player must roll in exactly one Gig per turn before ending it. The D20 can only be rolled once it's the last die in the fixer area.
-- **Min, max and value-pairs.** Max Gigs glow yellow, min Gigs glow red, and dice in a value-pair get a double outline. The pair count follows the rule that each Gig belongs to only one pair.
+- **Min, max and value-pairs.** Max Gigs show a yellow number and label, min Gigs a red one, and dice in a value-pair get a double outline. The outline always stays the owner's color. The pair count follows the rule that each Gig belongs to only one pair.
 - **Adjust values.** Tap any rolled Gig to set its value with −/+, a number grid, or a reroll.
 - **Steal and swap.** Steal lets you pick any number of rival Gigs. Swap trades one friendly Gig for one rival Gig. Values are kept in both cases.
 - **Win detection.** A player who starts their turn with 7 Gigs wins. Overtime begins after two consecutive turns in which both fixer areas were empty. In overtime, reaching 7 Gigs wins instantly.
 - **Undo.** Every game action can be undone, including ending a turn or a win.
 - **Stats.** Each side shows its Gig count, Street Cred (the sum of its values) and pairs.
 - **Persistence.** The game is saved to `localStorage`, so a refresh or accidental close doesn't lose it.
-- **Customization.** Player names and neon dice colors (a stolen die takes its new controller's color). Who goes first can be picked or decided by a D20 roll-off.
+- **Customization.** Player names and neon dice colors (dice keep their owner's color even after being stolen or swapped). Who goes first can be picked or decided by a D20 roll-off.
 
 ## Tech stack
 
