@@ -5,6 +5,7 @@ import { DieIcon } from "@/components/DieIcon";
 import { PlayerPanel, type Mode, type Rolling } from "@/components/PlayerPanel";
 import { SetupScreen } from "@/components/SetupScreen";
 import { Modal, NeonButton, cx } from "@/components/ui";
+import { useWakeLock, wakeLockSupported } from "@/lib/useWakeLock";
 import {
   MAX_COLOR,
   MIN_COLOR,
@@ -30,11 +31,17 @@ function loadStore(): Store {
   return { present: initialState(), past: [] };
 }
 
-function loadFlip(): boolean {
+interface Prefs {
+  flipTop: boolean;
+  keepAwake: boolean;
+}
+
+function loadPrefs(): Prefs {
+  const defaults: Prefs = { flipTop: true, keepAwake: true };
   try {
-    return JSON.parse(localStorage.getItem(PREFS_KEY) ?? "{}").flipTop ?? true;
+    return { ...defaults, ...JSON.parse(localStorage.getItem(PREFS_KEY) ?? "{}") };
   } catch {
-    return true;
+    return defaults;
   }
 }
 
@@ -46,7 +53,8 @@ const vibrate = (ms: number) => {
 
 export default function Game() {
   const [store, dispatch] = useReducer(storeReducer, undefined, loadStore);
-  const [flipTop, setFlipTop] = useState(loadFlip);
+  const [prefs, setPrefs] = useState(loadPrefs);
+  const { flipTop, keepAwake } = prefs;
   const [mode, setMode] = useState<Mode>(null);
   const [rolling, setRolling] = useState<Rolling | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -65,9 +73,11 @@ export default function Game() {
 
   useEffect(() => {
     try {
-      localStorage.setItem(PREFS_KEY, JSON.stringify({ flipTop }));
+      localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
     } catch {}
-  }, [flipTop]);
+  }, [prefs]);
+
+  useWakeLock(keepAwake && s.status !== "setup");
 
   useEffect(() => () => {
     if (rollTimer.current) window.clearInterval(rollTimer.current);
@@ -249,9 +259,14 @@ export default function Game() {
               >
                 New game setup
               </NeonButton>
-              <NeonButton color="#00f0ff" onClick={() => setFlipTop((v) => !v)}>
+              <NeonButton color="#00f0ff" onClick={() => setPrefs((p) => ({ ...p, flipTop: !p.flipTop }))}>
                 Flip Player 2: {flipTop ? "On" : "Off"}
               </NeonButton>
+              {wakeLockSupported() && (
+                <NeonButton color="#00f0ff" onClick={() => setPrefs((p) => ({ ...p, keepAwake: !p.keepAwake }))}>
+                  Keep screen awake: {keepAwake ? "On" : "Off"}
+                </NeonButton>
+              )}
               <NeonButton color="#b9c2d0" onClick={() => setMenuOpen(false)}>
                 Close
               </NeonButton>

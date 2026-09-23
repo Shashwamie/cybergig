@@ -12,6 +12,7 @@ A mobile-first web app for tracking Gig dice in the [Cyberpunk Trading Card Game
 - **Win detection.** A player who starts their turn with 7 Gigs wins. Overtime begins after two consecutive turns in which both fixer areas were empty. In overtime, reaching 7 Gigs wins instantly.
 - **Undo.** Every game action can be undone, including ending a turn or a win.
 - **Stats.** Each side shows its Gig count, Street Cred (the sum of its values) and pairs.
+- **Screen stays awake.** During a game the app uses the Screen Wake Lock API so the phone doesn't dim or lock. It can be turned off in the menu.
 - **Persistence.** The game is saved to `localStorage`, so a refresh or accidental close doesn't lose it.
 - **Customization.** Player names and neon dice colors (dice keep their owner's color even after being stolen or swapped). Who goes first can be picked or decided by a D20 roll-off.
 
