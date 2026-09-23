@@ -40,8 +40,10 @@ export function SetupScreen({ initialPlayers, onStart }: SetupScreenProps) {
     );
 
   return (
-    <main className="h-dvh overflow-y-auto px-4 py-8 sm:py-12">
-      <div className="mx-auto flex max-w-3xl flex-col gap-8">
+    // Pad by the safe-area insets so the notch/Dynamic Island and home bar never cover content
+    // when running as a home-screen app, and center vertically when there's spare room.
+    <main className="flex h-dvh flex-col overflow-y-auto pt-[calc(env(safe-area-inset-top)_+_2rem)] pr-[max(1rem,env(safe-area-inset-right))] pb-[calc(env(safe-area-inset-bottom)_+_2rem)] pl-[max(1rem,env(safe-area-inset-left))] sm:pt-[calc(env(safe-area-inset-top)_+_3rem)] sm:pb-[calc(env(safe-area-inset-bottom)_+_3rem)]">
+      <div className="mx-auto my-auto flex w-full max-w-3xl flex-col gap-8">
         <header className="text-center text-neon-yellow">
           <p className="text-[11px] tracking-[0.5em] text-neon-cyan uppercase">Cyberpunk TCG</p>
           <h1 className="glow-text mt-2 font-display text-4xl font-black tracking-widest uppercase sm:text-6xl">

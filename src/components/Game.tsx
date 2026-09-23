@@ -148,7 +148,7 @@ export default function Game() {
   );
 
   return (
-    <main className="flex h-dvh flex-col-reverse gap-1.5 p-1.5 pt-[max(0.375rem,env(safe-area-inset-top))] pb-[max(0.375rem,env(safe-area-inset-bottom))] landscape:flex-row">
+    <main className="flex h-dvh flex-col-reverse gap-1.5 pt-[max(0.375rem,env(safe-area-inset-top))] pr-[max(0.375rem,env(safe-area-inset-right))] pb-[max(0.375rem,env(safe-area-inset-bottom))] pl-[max(0.375rem,env(safe-area-inset-left))] landscape:flex-row">
       {panel(0)}
 
       {/* Center console */}

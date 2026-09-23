@@ -59,7 +59,7 @@ export function Modal({ children, onClose, flipped, color = "#00f0ff", label }: 
       role="dialog"
       aria-modal
       aria-label={label}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 pt-[max(1rem,env(safe-area-inset-top))] pr-[max(1rem,env(safe-area-inset-right))] pb-[max(1rem,env(safe-area-inset-bottom))] pl-[max(1rem,env(safe-area-inset-left))] backdrop-blur-sm"
       onClick={onClose}
     >
       <div
