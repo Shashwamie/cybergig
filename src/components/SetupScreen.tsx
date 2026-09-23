@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DieIcon } from "@/components/DieIcon";
-import { NeonButton, cx } from "@/components/ui";
-import { NEON_COLORS, SIDES, randInt, type Player, type PlayerId } from "@/lib/game";
+import { Modal, NeonButton, cx } from "@/components/ui";
+import { NEON_COLORS, SIDES, randInt, rival, type Player, type PlayerId } from "@/lib/game";
+
+const nameOf = (p: Player, id: PlayerId) => p.name.trim() || `Player ${id + 1}`;
 
 interface SetupScreenProps {
   initialPlayers: [Player, Player];
@@ -13,7 +15,7 @@ interface SetupScreenProps {
 export function SetupScreen({ initialPlayers, onStart }: SetupScreenProps) {
   const [players, setPlayers] = useState(initialPlayers);
   const [first, setFirst] = useState<PlayerId>(0);
-  const [rollOff, setRollOff] = useState<[number, number] | null>(null);
+  const [rollingOff, setRollingOff] = useState(false);
 
   const update = (id: PlayerId, patch: Partial<Player>) =>
     setPlayers((ps) => {
@@ -22,22 +24,8 @@ export function SetupScreen({ initialPlayers, onStart }: SetupScreenProps) {
       return next;
     });
 
-  // The rules suggest both players roll a d20; higher goes first, ties re-roll.
-  const doRollOff = () => {
-    let a: number, b: number;
-    do {
-      a = randInt(20);
-      b = randInt(20);
-    } while (a === b);
-    setRollOff([a, b]);
-    setFirst(a > b ? 0 : 1);
-  };
-
-  const start = () =>
-    onStart(
-      players.map((p, i) => ({ ...p, name: p.name.trim() || `Player ${i + 1}` })) as [Player, Player],
-      first,
-    );
+  const start = (firstPlayer: PlayerId) =>
+    onStart(players.map((p, i) => ({ ...p, name: nameOf(p, i as PlayerId) })) as [Player, Player], firstPlayer);
 
   return (
     // Pad by the safe-area insets so the notch/Dynamic Island and home bar never cover content
@@ -106,35 +94,126 @@ export function SetupScreen({ initialPlayers, onStart }: SetupScreenProps) {
                 key={id}
                 color={players[id].color}
                 solid={first === id}
-                onClick={() => {
-                  setFirst(id);
-                  setRollOff(null);
-                }}
+                onClick={() => setFirst(id)}
                 className="truncate"
               >
-                <span className="truncate">{players[id].name || `Player ${id + 1}`}</span>
+                <span className="truncate">{nameOf(players[id], id)}</span>
               </NeonButton>
             ))}
-            <NeonButton color="#fcee0a" onClick={doRollOff}>
+            <NeonButton color="#fcee0a" onClick={() => setRollingOff(true)}>
               Roll off
             </NeonButton>
           </div>
-          {rollOff && (
-            <p className="mt-3 text-center font-display text-sm tracking-wider text-white">
-              <span style={{ color: players[0].color }}>{rollOff[0]}</span>
-              <span className="mx-3 text-steel/50">vs</span>
-              <span style={{ color: players[1].color }}>{rollOff[1]}</span>
-              <span className="ml-3 text-steel/70">
-                · {players[first].name || `Player ${first + 1}`} goes first
-              </span>
-            </p>
-          )}
         </section>
 
-        <NeonButton size="lg" solid color="#fcee0a" onClick={start} className="mx-auto w-full max-w-sm">
+        <NeonButton size="lg" solid color="#fcee0a" onClick={() => start(first)} className="mx-auto w-full max-w-sm">
           Jack in
         </NeonButton>
       </div>
+
+      {rollingOff && <RollOff players={players} onBack={() => setRollingOff(false)} onJackIn={start} />}
     </main>
+  );
+}
+
+interface RollOffProps {
+  players: [Player, Player];
+  onBack: () => void;
+  onJackIn: (first: PlayerId) => void;
+}
+
+/** Both players roll a d20; the higher roll chooses to go first or second. Ties re-roll. */
+function RollOff({ players, onBack, onJackIn }: RollOffProps) {
+  const [faces, setFaces] = useState<[number, number]>(() => [randInt(20), randInt(20)]);
+  const [rolling, setRolling] = useState(true);
+  const [choice, setChoice] = useState<"first" | "second" | null>(null);
+
+  useEffect(() => {
+    let ticks = 0;
+    const timer = window.setInterval(() => {
+      ticks += 1;
+      if (ticks < 12) return setFaces([randInt(20), randInt(20)]);
+      window.clearInterval(timer);
+      let a: number, b: number;
+      do {
+        a = randInt(20);
+        b = randInt(20);
+      } while (a === b);
+      setFaces([a, b]);
+      setRolling(false);
+    }, 70);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const winner: PlayerId = faces[0] > faces[1] ? 0 : 1;
+  const winnerColor = rolling ? "#b9c2d0" : players[winner].color;
+  const first = choice === "second" ? rival(winner) : winner;
+
+  return (
+    <Modal label="Roll off" color="#fcee0a" onClose={onBack}>
+      <h2 className="glow-text text-center font-display text-xl font-bold tracking-[0.3em] uppercase">Roll off</h2>
+
+      <div className="mt-5 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+        {([0, 1] as PlayerId[]).map((id) => (
+          <div
+            key={id}
+            style={{ color: players[id].color, order: id === 0 ? 0 : 2 }}
+            className={cx(
+              "flex min-w-0 flex-col items-center gap-2 transition-opacity duration-300",
+              !rolling && winner !== id && "opacity-35",
+            )}
+          >
+            <span className={cx("block size-20 sm:size-24", rolling && "animate-die-roll")}>
+              <DieIcon
+                sides={20}
+                value={faces[id]}
+                fillOpacity={!rolling && winner === id ? 0.15 : 0.06}
+                className="glow size-full"
+              />
+            </span>
+            <span className="max-w-full truncate font-display text-xs font-bold tracking-wider uppercase">
+              {nameOf(players[id], id)}
+            </span>
+          </div>
+        ))}
+        <span className="order-1 text-[10px] tracking-[0.3em] text-steel/50 uppercase">vs</span>
+      </div>
+
+      <div className="mt-6 text-center" aria-live="polite">
+        <p
+          style={{ color: winnerColor }}
+          className="glow-text truncate font-display text-lg font-bold tracking-wider uppercase"
+        >
+          {rolling ? "Rolling…" : `${nameOf(players[winner], winner)} wins`}
+        </p>
+        <p className="mt-1 text-[10px] tracking-[0.25em] text-steel/70 uppercase">
+          {rolling ? "\u00a0" : choice ? `${nameOf(players[first], first)} goes first` : "Choose your turn order"}
+        </p>
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-2">
+        {(["first", "second"] as const).map((c) => (
+          <NeonButton
+            key={c}
+            color={winnerColor}
+            solid={choice === c}
+            aria-pressed={choice === c}
+            disabled={rolling}
+            onClick={() => setChoice(c)}
+          >
+            Go {c}
+          </NeonButton>
+        ))}
+      </div>
+
+      <div className="mt-6 grid grid-cols-2 gap-2">
+        <NeonButton color="#b9c2d0" onClick={onBack}>
+          Back
+        </NeonButton>
+        <NeonButton solid color="#fcee0a" disabled={rolling || !choice} onClick={() => onJackIn(first)}>
+          Jack in
+        </NeonButton>
+      </div>
+    </Modal>
   );
 }
