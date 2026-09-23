@@ -4,7 +4,7 @@ A mobile-first web app for tracking Gig dice in the [Cyberpunk Trading Card Game
 
 ## Features
 
-- **Shared-device play.** On a phone held upright, the top player's half is flipped 180° so players sitting across from each other can each read their own side. On desktop or a phone turned sideways, the halves sit side by side. The flip can be turned off in the menu.
+- **Shared-device play.** Player 2's half is flipped 180° so players sitting across from each other can each read their own side. Held upright, the halves stack top and bottom; turned sideways, they sit side by side. On a phone or tablet, Player 2 is flipped in both orientations. On a desktop monitor, the side-by-side halves both face the screen. The flip can be turned off in the menu.
 - **Roll-in enforcement.** Each player starts with a D4, D6, D8, D10, D12 and D20 in their fixer area. The active player must roll in exactly one Gig per turn before ending it. The D20 can only be rolled once it's the last die in the fixer area.
 - **Min, max and value-pairs.** Max Gigs show a yellow number and label, min Gigs a red one, and dice in a value-pair get a double outline. The outline always stays the owner's color. The pair count follows the rule that each Gig belongs to only one pair.
 - **Adjust values.** Tap any rolled Gig to set its value with −/+, a number grid, or a reroll.

@@ -34,6 +34,17 @@
   }
 }
 
+/* Two players sharing a screen across a table: any portrait screen, or a touch device held sideways.
+   Desktop monitors in landscape are excluded, so Player 2's side only flips where it helps. */
+@custom-variant tabletop {
+  @media (orientation: portrait) {
+    @slot;
+  }
+  @media (pointer: coarse) {
+    @slot;
+  }
+}
+
 @theme inline {
   --font-sans: var(--font-saira), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-orbitron), var(--font-saira), ui-sans-serif, sans-serif;

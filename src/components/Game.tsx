@@ -168,21 +168,22 @@ export default function Game() {
 
         <div
           className={cx(
-            "min-w-0 flex-1 text-center transition-transform duration-500 landscape:flex-none",
-            flipDialogs && "portrait:rotate-180",
+            "min-w-0 flex-1 text-center transition-transform duration-500 landscape:w-full landscape:flex-none",
+            flipDialogs && "tabletop:rotate-180",
           )}
         >
           <p className="font-display text-[10px] tracking-[0.3em] text-steel/60 uppercase lg:text-sm">
             Turn <span className="text-white">{s.turn}</span>
           </p>
           {s.overtime ? (
-            <p className="glow-text animate-flicker font-display text-xs font-bold tracking-[0.25em] text-neon-red uppercase lg:text-base">
+            <p className="glow-text animate-flicker truncate font-display text-xs font-bold tracking-[0.25em] text-neon-red uppercase max-lg:landscape:text-[10px] max-lg:landscape:tracking-[0.12em] lg:text-base">
               Overtime
             </p>
           ) : (
             <p
-              className="truncate font-display text-xs font-bold tracking-[0.15em] uppercase lg:text-base"
+              className="truncate font-display text-xs font-bold tracking-[0.15em] uppercase max-lg:landscape:text-[10px] max-lg:landscape:tracking-[0.08em] lg:text-base"
               style={{ color: activePlayer.color }}
+              title={activePlayer.name}
             >
               {activePlayer.name}
             </p>
@@ -249,7 +250,7 @@ export default function Game() {
                 New game setup
               </NeonButton>
               <NeonButton color="#00f0ff" onClick={() => setFlipTop((v) => !v)}>
-                Flip top player: {flipTop ? "On" : "Off"}
+                Flip Player 2: {flipTop ? "On" : "Off"}
               </NeonButton>
               <NeonButton color="#b9c2d0" onClick={() => setMenuOpen(false)}>
                 Close

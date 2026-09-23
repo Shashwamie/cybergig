@@ -84,7 +84,7 @@ export function PlayerPanel({
       className={cx(
         "relative flex min-h-0 min-w-0 flex-1 flex-col gap-2 border p-3 transition-colors duration-300 sm:p-4 lg:gap-3 lg:p-6",
         active ? "glow-box border-current" : "border-current/25",
-        flipped && "portrait:rotate-180",
+        flipped && "tabletop:rotate-180",
       )}
     >
       {/* Header */}

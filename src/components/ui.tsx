@@ -40,7 +40,7 @@ export function NeonButton({ color, solid, size = "md", className, style, childr
 interface ModalProps {
   children: ReactNode;
   onClose?: () => void;
-  /** Rotate the dialog 180° in portrait so the top player can read it. */
+  /** Rotate the dialog 180° on tabletop screens so Player 2 can read it. */
   flipped?: boolean;
   color?: string;
   label: string;
@@ -63,7 +63,7 @@ export function Modal({ children, onClose, flipped, color = "#00f0ff", label }: 
       onClick={onClose}
     >
       <div
-        className={cx("w-full max-w-md", flipped && "portrait:rotate-180")}
+        className={cx("w-full max-w-md", flipped && "tabletop:rotate-180")}
         onClick={(e) => e.stopPropagation()}
         style={{ color }}
       >
