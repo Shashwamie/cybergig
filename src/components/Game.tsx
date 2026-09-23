@@ -152,7 +152,7 @@ export default function Game() {
       {panel(0)}
 
       {/* Center console */}
-      <div className="flex shrink-0 items-center justify-between gap-2 px-1 landscape:w-24 landscape:flex-col landscape:justify-center landscape:gap-4 landscape:px-0 landscape:py-2">
+      <div className="flex shrink-0 items-center justify-between gap-2 px-1 landscape:w-24 lg:landscape:w-36 landscape:flex-col landscape:justify-center landscape:gap-4 landscape:px-0 landscape:py-2">
         <NeonButton
           size="sm"
           color="#00f0ff"
@@ -172,16 +172,16 @@ export default function Game() {
             flipDialogs && "portrait:rotate-180",
           )}
         >
-          <p className="font-display text-[10px] tracking-[0.3em] text-steel/60 uppercase">
+          <p className="font-display text-[10px] tracking-[0.3em] text-steel/60 uppercase lg:text-sm">
             Turn <span className="text-white">{s.turn}</span>
           </p>
           {s.overtime ? (
-            <p className="glow-text animate-flicker font-display text-xs font-bold tracking-[0.25em] text-neon-red uppercase">
+            <p className="glow-text animate-flicker font-display text-xs font-bold tracking-[0.25em] text-neon-red uppercase lg:text-base">
               Overtime
             </p>
           ) : (
             <p
-              className="truncate font-display text-xs font-bold tracking-[0.15em] uppercase"
+              className="truncate font-display text-xs font-bold tracking-[0.15em] uppercase lg:text-base"
               style={{ color: activePlayer.color }}
             >
               {activePlayer.name}

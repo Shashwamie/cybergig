@@ -25,7 +25,7 @@ export function NeonButton({ color, solid, size = "md", className, style, childr
       className={cx(
         "relative inline-flex select-none items-center justify-center gap-2 border border-current font-semibold uppercase transition",
         "active:scale-[0.97] disabled:opacity-30 disabled:active:scale-100",
-        size === "sm" && "min-h-9 px-3 text-[11px] tracking-[0.18em]",
+        size === "sm" && "min-h-9 px-3 text-[11px] tracking-[0.18em] lg:min-h-12 lg:px-5 lg:text-sm",
         size === "md" && "min-h-11 px-4 text-xs tracking-[0.2em]",
         size === "lg" && "min-h-14 px-6 text-sm tracking-[0.3em]",
         solid ? "glow-box bg-current/15 enabled:hover:bg-current/25" : "enabled:hover:bg-current/10",
@@ -109,7 +109,7 @@ export function DieButton({
   const min = inGig && value === 1;
   // Min/max only recolor the number and label; the outline keeps the owner's color.
   const tone = max ? MAX_COLOR : min ? MIN_COLOR : undefined;
-  const tags = [max && "MAX", min && "MIN", paired && "PAIR"].filter(Boolean).join(" · ");
+  const tags = [max && "MAX", min && "MIN", paired && "PAIR"].filter(Boolean).join("·");
   const fixer = variant === "fixer" && !rolling;
 
   return (
@@ -117,7 +117,7 @@ export function DieButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      aria-label={`D${die.sides}${value != null ? `, value ${value}` : ", not rolled"}${tags ? `, ${tags.toLowerCase()}` : ""}`}
+      aria-label={`D${die.sides}${value != null ? `, value ${value}` : ", not rolled"}${tags ? `, ${tags.toLowerCase().replaceAll("·", ", ")}` : ""}`}
       aria-pressed={selected || undefined}
       style={{ color }}
       className={cx(
@@ -130,8 +130,8 @@ export function DieButton({
         className={cx(
           "block",
           variant === "gig"
-            ? "size-[clamp(3.25rem,min(17vw,10.5dvh),6.5rem)] landscape:size-[clamp(3.25rem,min(8.5vw,16dvh),7rem)]"
-            : "size-[clamp(2.25rem,min(10vw,6dvh),3.5rem)] landscape:size-[clamp(2.25rem,min(5vw,9dvh),4rem)]",
+            ? "size-[clamp(3.25rem,min(17vw,10.5dvh),8.5rem)] landscape:size-[clamp(3.25rem,min(9vw,16dvh),10rem)]"
+            : "size-[clamp(2.25rem,min(10vw,6dvh),4.5rem)] landscape:size-[clamp(2.25rem,min(5vw,9dvh),5rem)]",
           rolling && "animate-die-roll",
           pop && "animate-die-pop",
           ready && !rolling && "animate-ready",
@@ -150,10 +150,10 @@ export function DieButton({
       {variant === "gig" && (
         <span
           style={{ color: tone }}
-          className="mt-0.5 font-display text-[9px] tracking-[0.15em] whitespace-nowrap opacity-80"
+          className="mt-0.5 font-display text-[9px] tracking-[0.08em] whitespace-nowrap opacity-80 lg:mt-1 lg:text-xs lg:tracking-[0.15em]"
         >
           D{die.sides}
-          {tags && ` · ${tags}`}
+          {tags && `·${tags}`}
         </span>
       )}
       {selected && (
