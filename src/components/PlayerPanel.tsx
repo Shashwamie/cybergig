@@ -3,6 +3,7 @@
 import { useState } from "react";
 import {
   NEON_COLORS,
+  canActOnGigs,
   canEndTurn,
   canRoll,
   fixerDice,
@@ -64,6 +65,7 @@ export function PlayerPanel({
   const cred = streetCred(state, id);
   const needsRoll = active && mustRoll(state);
   const rivalGigs = gigDice(state, rival(id)).length;
+  const gigsLocked = !canActOnGigs(state);
 
   const isSelected = (d: Die) =>
     mode?.kind === "steal"
@@ -160,6 +162,7 @@ export function PlayerPanel({
               selected={isSelected(d)}
               dimmed={isDimmed(d)}
               pop={state.lastRolledId === d.id}
+              disabled={gigsLocked}
               onClick={() => onDieTap(d)}
             />
           ))
@@ -203,14 +206,14 @@ export function PlayerPanel({
         <footer className="flex items-center gap-2">
           <NeonButton
             size="sm"
-            disabled={state.status !== "playing" || rivalGigs === 0 || !!mode}
+            disabled={gigsLocked || rivalGigs === 0 || !!mode}
             onClick={() => onStartMode("steal", id)}
           >
             Steal
           </NeonButton>
           <NeonButton
             size="sm"
-            disabled={state.status !== "playing" || rivalGigs === 0 || gigs.length === 0 || !!mode}
+            disabled={gigsLocked || rivalGigs === 0 || gigs.length === 0 || !!mode}
             onClick={() => onStartMode("swap", id)}
           >
             Swap

@@ -45,7 +45,7 @@ export function SetupScreen({ initialPlayers, onStart }: SetupScreenProps) {
         <header className="text-center text-neon-yellow">
           <p className="text-[11px] tracking-[0.5em] text-neon-cyan uppercase">Cyberpunk TCG</p>
           <h1 className="glow-text mt-2 font-display text-4xl font-black tracking-widest uppercase sm:text-6xl">
-            Gig Tracker
+            CyberGig
           </h1>
           <div className="mt-5 flex justify-center gap-2 sm:gap-3" aria-hidden>
             {SIDES.map((s) => (

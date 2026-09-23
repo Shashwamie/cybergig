@@ -2,7 +2,7 @@
 
 # Project notes
 
-Gig Tracker: a shared-device dice tracker for the Cyberpunk TCG. See README.md for features and structure.
+CyberGig: a shared-device dice tracker for the Cyberpunk TCG. See README.md for features and structure.
 
 ## Conventions
 

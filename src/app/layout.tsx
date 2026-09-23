@@ -15,9 +15,9 @@ const orbitron = Orbitron({
 });
 
 export const metadata: Metadata = {
-  title: "Gig Tracker",
+  title: "CyberGig",
   description: "Gig dice tracker for the Cyberpunk Trading Card Game.",
-  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "Gig Tracker" },
+  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "CyberGig" },
 };
 
 export const viewport: Viewport = {

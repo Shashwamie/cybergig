@@ -135,6 +135,9 @@ export const mustRoll = (s: GameState) =>
 
 export const canEndTurn = (s: GameState) => s.status === "playing" && !mustRoll(s);
 
+/** Adjusting, stealing and swapping wait until the turn's roll-in is done (CR 8.4.1, 8.7). */
+export const canActOnGigs = (s: GameState) => s.status === "playing" && !mustRoll(s);
+
 // ---------- Reducer ----------
 
 export type Action =
@@ -234,7 +237,7 @@ export function gameReducer(s: GameState, a: Action): GameState {
     case "set": {
       const die = s.dice.find((d) => d.id === a.dieId);
       // Can't adjust to a value off the die's faces or to its current value (CR 6.4.4, 6.4.5).
-      if (s.status !== "playing" || !die || die.zone !== "gig") return s;
+      if (!canActOnGigs(s) || !die || die.zone !== "gig") return s;
       if (a.value < 1 || a.value > die.sides || a.value === die.value) return s;
       const next = updateDice(s, (d) => (d.id === die.id ? { ...d, value: a.value } : d));
       return {
@@ -244,7 +247,7 @@ export function gameReducer(s: GameState, a: Action): GameState {
     }
 
     case "steal": {
-      if (s.status !== "playing") return s;
+      if (!canActOnGigs(s)) return s;
       const victim = rival(a.thief);
       const ids = new Set(
         a.dieIds.filter((id) =>
@@ -261,7 +264,7 @@ export function gameReducer(s: GameState, a: Action): GameState {
     }
 
     case "swap": {
-      if (s.status !== "playing") return s;
+      if (!canActOnGigs(s)) return s;
       const da = s.dice.find((d) => d.id === a.a);
       const db = s.dice.find((d) => d.id === a.b);
       if (!da || !db || da.zone !== "gig" || db.zone !== "gig" || da.controller === db.controller) return s;

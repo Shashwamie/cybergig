@@ -1,4 +1,4 @@
-# Gig Tracker: Cyberpunk TCG Dice Tracker
+# CyberGig: Cyberpunk TCG Dice Tracker
 
 A mobile-first web app for tracking Gig dice in the [Cyberpunk Trading Card Game](https://cyberpunktcg.com/). Two players share one device. Each player gets their own half of the screen, and the rules for rolling, stealing, swapping and winning are built in.
 
