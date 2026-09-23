@@ -33,10 +33,13 @@ export function SetupScreen({ initialPlayers, onStart }: SetupScreenProps) {
     <main className="flex h-dvh flex-col overflow-y-auto pt-[calc(env(safe-area-inset-top)_+_2rem)] pr-[max(1rem,env(safe-area-inset-right))] pb-[calc(env(safe-area-inset-bottom)_+_2rem)] pl-[max(1rem,env(safe-area-inset-left))] sm:pt-[calc(env(safe-area-inset-top)_+_3rem)] sm:pb-[calc(env(safe-area-inset-bottom)_+_3rem)]">
       <div className="mx-auto my-auto flex w-full max-w-3xl flex-col gap-8">
         <header className="text-center text-neon-yellow">
-          <p className="text-[11px] tracking-[0.5em] text-neon-cyan uppercase">Cyberpunk TCG</p>
-          <h1 className="glow-text mt-2 font-display text-4xl font-black tracking-widest uppercase sm:text-6xl">
+          <h1 className="glow-text font-display text-4xl font-black tracking-widest uppercase sm:text-6xl">
             CyberGig
           </h1>
+          {/* Describes what the app is for; it's a fan tool, not an official product. */}
+          <p className="mt-2 text-[11px] tracking-[0.3em] text-steel/70 uppercase sm:text-xs">
+            Dice tracker for Cyberpunk TCG
+          </p>
           <div className="mt-5 flex justify-center gap-2 sm:gap-3" aria-hidden>
             {SIDES.map((s) => (
               <DieIcon key={s} sides={s} value={null} className="glow size-9 sm:size-11" />

@@ -259,6 +259,11 @@ export default function Game() {
                 Tap a player&apos;s name to change their dice color. Tap any rolled Gig to change its value.
                 Undo reverses any mistake, including ending a turn.
               </p>
+              <p className="mt-1 border-t border-current/20 pt-3 text-[10px] leading-relaxed text-steel/50">
+                CyberGig is an unofficial fan-made tool. It is not affiliated with, endorsed by, or sponsored
+                by the publishers of Cyberpunk TCG. Cyberpunk and related marks belong to their respective
+                owners.
+              </p>
             </div>
           )}
         </Modal>

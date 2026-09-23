@@ -73,6 +73,10 @@ The engine in `src/lib/game.ts` follows the [Comprehensive Rules](https://cyberp
 | CR 6.5.1 | Each Gig counts towards only one value-pair |
 | CR 6.6 / 6.7 | Swaps and steals keep dice values unchanged |
 
+## Disclaimer
+
+CyberGig is an unofficial fan-made tool. It is not affiliated with, endorsed by, or sponsored by the publishers of Cyberpunk TCG. Cyberpunk and related marks belong to their respective owners.
+
 ## Roadmap ideas
 
 - Action log / battle history
