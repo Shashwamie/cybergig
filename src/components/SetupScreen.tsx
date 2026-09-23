@@ -132,12 +132,6 @@ export function SetupScreen({ initialPlayers, onStart }: SetupScreenProps) {
         <NeonButton size="lg" solid color="#fcee0a" onClick={start} className="mx-auto w-full max-w-sm">
           Jack in
         </NeonButton>
-
-        <p className="text-center text-[11px] leading-relaxed text-steel/50">
-          Each turn, roll in one Gig from your fixer area. The D20 is always rolled last.
-          <br />
-          Start a turn with {7} Gigs to win. In overtime, reaching 7 wins instantly.
-        </p>
       </div>
     </main>
   );

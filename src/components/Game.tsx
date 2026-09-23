@@ -166,7 +166,12 @@ export default function Game() {
           <UndoIcon /> <span className="hidden sm:inline">Undo</span>
         </NeonButton>
 
-        <div className="min-w-0 flex-1 text-center landscape:flex-none">
+        <div
+          className={cx(
+            "min-w-0 flex-1 text-center transition-transform duration-500 landscape:flex-none",
+            flipDialogs && "portrait:rotate-180",
+          )}
+        >
           <p className="font-display text-[10px] tracking-[0.3em] text-steel/60 uppercase">
             Turn <span className="text-white">{s.turn}</span>
           </p>

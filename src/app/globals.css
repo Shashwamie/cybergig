@@ -79,6 +79,7 @@ button {
   cursor: pointer;
   touch-action: manipulation;
 }
+
 button:disabled {
   cursor: not-allowed;
 }

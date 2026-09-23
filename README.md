@@ -11,7 +11,7 @@ A mobile-first web app for tracking Gig dice in the [Cyberpunk Trading Card Game
 - **Steal and swap.** Steal lets you pick any number of rival Gigs. Swap trades one friendly Gig for one rival Gig. Values are kept in both cases.
 - **Win detection.** A player who starts their turn with 7 Gigs wins. Overtime begins after two consecutive turns in which both fixer areas were empty. In overtime, reaching 7 Gigs wins instantly.
 - **Undo.** Every game action can be undone, including ending a turn or a win.
-- **Stats.** Each side shows its Gig count (out of 7), Street Cred (the sum of its values) and pairs.
+- **Stats.** Each side shows its Gig count, Street Cred (the sum of its values) and pairs.
 - **Persistence.** The game is saved to `localStorage`, so a refresh or accidental close doesn't lose it.
 - **Customization.** Player names and neon dice colors (a stolen die takes its new controller's color). Who goes first can be picked or decided by a D20 roll-off.
 

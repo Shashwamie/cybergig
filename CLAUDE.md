@@ -18,7 +18,7 @@ Gig Tracker: a shared-device dice tracker for the Cyberpunk TCG. See README.md f
 - Components get their neon color from `currentColor`: set `style={{ color }}` on a container and use `border-current`, `bg-current/15`, and the `glow` / `glow-text` / `glow-box` utilities.
 - Yellow (`MAX_COLOR`) and red (`MIN_COLOR`) are reserved for max/min Gigs and must not be offered as player colors.
 - Look: black negative space, thin neon outlines, uppercase wide-tracked labels. Avoid solid fills other than low-opacity tints.
-- Player 2's panel and any dialog aimed at them use `portrait:rotate-180` (when the flip setting is on).
+- Player 2's panel, any dialog aimed at them, and the center turn text (on their turn) use `portrait:rotate-180` when the flip setting is on.
 
 ## Verifying changes
 

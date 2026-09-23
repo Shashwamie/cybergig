@@ -3,7 +3,6 @@
 import { useState } from "react";
 import {
   NEON_COLORS,
-  WIN_GIGS,
   canEndTurn,
   canRoll,
   fixerDice,
@@ -111,7 +110,7 @@ export function PlayerPanel({
           </p>
         </div>
         <dl className="flex shrink-0 gap-3 text-right sm:gap-5">
-          <Stat label="Gigs" value={`${gigs.length}`} suffix={`/${WIN_GIGS}`} strong />
+          <Stat label="Gigs" value={`${gigs.length}`} strong />
           <Stat label="Cred" value={cred == null ? "—" : String(cred)} />
           <Stat label="Pairs" value={String(pairs)} />
         </dl>
@@ -232,7 +231,7 @@ export function PlayerPanel({
   );
 }
 
-function Stat({ label, value, suffix, strong }: { label: string; value: string; suffix?: string; strong?: boolean }) {
+function Stat({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
   return (
     <div>
       <dt className="text-[9px] tracking-[0.25em] text-steel/60 uppercase">{label}</dt>
@@ -243,7 +242,6 @@ function Stat({ label, value, suffix, strong }: { label: string; value: string; 
         )}
       >
         {value}
-        {suffix && <span className="text-xs text-steel/50">{suffix}</span>}
       </dd>
     </div>
   );
